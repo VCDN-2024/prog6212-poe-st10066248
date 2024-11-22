@@ -27,6 +27,15 @@ else
     app.UseDeveloperExceptionPage();
 }
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configure the database context
+builder.Services.AddDbContext<ClaimsTrackingSystemContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 app.UseStaticFiles();
 
 app.UseRouting();
