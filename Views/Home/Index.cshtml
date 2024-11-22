@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Heading for the Claims Management System -->
+<h1 class="heading">Monthly Claims Management System <sup>&trade;</sup></h1>
+
+<!-- Select Role Options -->
+<div class="role-selection">
+    <h2>Select A Role</h2>
+
+    <div class="list-group">
+        <!-- Lecturer Submit Claim -->
+        <a href="/Lecturer/SubmitClaim" class="list-group-item list-group-item-action">Lecturer: Submit Claim</a>
+
+        <!-- Lecturer Track Claim -->
+        <a href="/Lecturer/TrackClaims" class="list-group-item list-group-item-action">Lecturer: Track Claim</a>
+
+        <!-- Program Coordinator Login -->
+        <a href="/Login/Index?role=Coordinator" class="list-group-item list-group-item-action">Program Coordinator: Login</a>
+
+        <!-- Academic Manager Login -->
+        <a href="/Login/Index?role=Manager" class="list-group-item list-group-item-action">Academic Manager: Login</a>
+    </div>
+</div>

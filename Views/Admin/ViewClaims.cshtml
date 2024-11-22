@@ -1,0 +1,149 @@
+﻿@model List<ClaimsTrackingSystem.Models.Claim>
+@using ClaimsTrackingSystem.Models
+
+@{
+    var role = ViewData["Role"]?.ToString();
+    var title = role == "Manager" ? "Academic Manager: View Claims" : "Program Coordinator: View Claims";
+    var history = ViewData["History"] as List<ClaimsTrackingSystem.Models.Claim>;
+}
+
+<h2>@title</h2>
+
+@if (!Model.Any())
+{
+    <p>There Are No Claims Submitted, Please Check Back Later</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lecturer Name</th>
+                <th>Surname</th>
+                <th>Month Claiming For</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Payout</th>
+                <th>Communication Method</th>
+                <th>Contact Information</th>
+                <th>Faculty</th>
+                <th>Notes</th>
+                <th>Document</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.Surname</td>
+                    <td>@claim.ClaimingForDate.ToString("MMMM yyyy")</td> <!-- Display month and year -->
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    <td>@claim.Payout</td>
+                    <td>@claim.CommunicationMethod</td> <!-- Email or SMS -->
+                    <td>@claim.ContactInfo</td> <!-- Email or Cellphone -->
+                    <td>@claim.Faculty</td> <!-- Faculty -->
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.DocumentFileName))
+                        {
+                            <a href="@Url.Content("~/uploads/" + claim.DocumentFileName)" target="_blank">
+                                @claim.DocumentFileName
+                            </a>
+                        }
+                        else
+                        {
+                            <span>No document uploaded</span>
+                        }
+                    </td>
+                    <td>@claim.Status</td>
+                    <td>
+                        @if (role == "Coordinator" && claim.Status == ClaimStatus.Pending)
+                        {
+                            <form method="post" action="/Admin/VerifyClaim?role=@role" style="display:inline;">
+                                <input type="hidden" name="id" value="@claim.Id" />
+                                <button type="submit" class="btn btn-warning">Verify</button>
+                            </form>
+                        }
+                        @if (role == "Manager" && claim.Status == ClaimStatus.Verified)
+                        {
+                            <form method="post" action="/Admin/AcceptClaim?role=@role" style="display:inline;">
+                                <input type="hidden" name="id" value="@claim.Id" />
+                                <button type="submit" class="btn btn-success">Accept</button>
+                            </form>
+                        }
+                        @if (claim.Status != ClaimStatus.Accepted && claim.Status != ClaimStatus.Rejected)
+                        {
+                            <form method="post" action="/Admin/RejectClaim?role=@role" style="display:inline;">
+                                <input type="hidden" name="id" value="@claim.Id" />
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (role == "Manager" && history != null && history.Any())
+{
+    <h3>Claim History</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lecturer Name</th>
+                <th>Surname</th>
+                <th>Month Claiming For</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Payout</th>
+                <th>Communication Method</th>
+                <th>Contact Information</th>
+                <th>Faculty</th>
+                <th>Notes</th>
+                <th>Document</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in history)
+            {
+                <tr>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.Surname</td>
+                    <td>@claim.ClaimingForDate.ToString("MMMM yyyy")</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    <td>@claim.Payout</td>
+                    <td>@claim.CommunicationMethod</td>
+                    <td>@claim.ContactInfo</td>
+                    <td>@claim.Faculty</td>
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.DocumentFileName))
+                        {
+                            <a href="@Url.Content("~/uploads/" + claim.DocumentFileName)" target="_blank">
+                                @claim.DocumentFileName
+                            </a>
+                        }
+                        else
+                        {
+                            <span>No document uploaded</span>
+                        }
+                    </td>
+                    <td>@claim.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+<a href="/">Back to Home</a>
+
+
+

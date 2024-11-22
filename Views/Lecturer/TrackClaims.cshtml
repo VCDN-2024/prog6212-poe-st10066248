@@ -1,0 +1,67 @@
+﻿@model List<ClaimsTrackingSystem.Models.Claim>
+
+<h2>Track Claims</h2>
+
+@if (!Model.Any())
+{
+    <p>There Are No Claims Submitted, Please Submit A Claim and Check Back</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lecturer Name</th>
+                <th>Surname</th>
+                <th>Month Claiming For</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Payout</th>
+                <th>Communication Method</th>
+                <th>Contact Information</th>
+                <th>Faculty</th>
+                <th>Notes</th>
+                <th>Document</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.Surname</td>
+                    <td>@claim.ClaimingForDate.ToString("MMMM yyyy")</td> <!-- Display month and year -->
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    <td>@claim.Payout</td>
+                    <td>@claim.CommunicationMethod</td> <!-- Email or SMS -->
+                    <td>@claim.ContactInfo</td> <!-- Email or Cellphone -->
+                    <td>@claim.Faculty</td> <!-- Faculty -->
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.DocumentFileName))
+                        {
+                            <a href="@Url.Content("~/uploads/" + claim.DocumentFileName)" target="_blank">
+                                @claim.DocumentFileName
+                            </a>
+                        }
+                        else
+                        {
+                            <span>No document uploaded</span>
+                        }
+                    </td>
+                    <td>@claim.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+<a href="/">Back to Home</a>
+
+
+
+
+
