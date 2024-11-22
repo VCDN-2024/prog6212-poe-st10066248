@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ClaimsTrackingSystem.Models.Claim>
+
+<h2>Approved Claims Report</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Payout</th>
+            <th>Approval Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.LecturerName</td>
+                <td>@claim.HoursWorked</td>
+                <td>@claim.HourlyRate</td>
+                <td>@(claim.HoursWorked * claim.HourlyRate)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- A button for PDF download -->
+<form method="get" asp-action="DownloadApprovedClaimsReport" asp-controller="HR">
+    <button type="submit" class="btn btn-primary">Download as PDF</button>
+</form>
+
